@@ -1,31 +1,32 @@
 package br.com.alura.mvc.mudi.controller;
 
-import br.com.alura.mvc.mudi.model.PedidoModel;
+import br.com.alura.mvc.mudi.model.Pedido;
+import br.com.alura.mvc.mudi.repository.PedidoRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.servlet.ModelAndView;
 
-import java.math.BigDecimal;
-import java.time.LocalDate;
-import java.util.Arrays;
-import java.util.Collections;
+import java.util.List;
 
 @Controller
 public class HomeController {
 
+    @Autowired
+    private PedidoRepository repository;
+
 
     @GetMapping("/home")
-    public String home(Model model){
-        PedidoModel pedido = new PedidoModel();
-        pedido.setNomeProduto("Cadeira Gamer");
-        pedido.setDataEntregaProduto(LocalDate.now());
-        pedido.setValorProduto(BigDecimal.TEN);
-        pedido.setUrlProduto("https://www.dt3sports.com.br/loja/elite-series/cadeira-gamer-dt3sports-onix-diamond/");
-        pedido.setUrlImagemProduto("https://www.dt3sports.com.br/wp-content/uploads/2017/03/JPG-onix-diamond-Red-1.jpg");
-        pedido.setDescricaoProduto("descrição do produto");
-        model.addAttribute("pedidos", Arrays.asList(pedido, pedido));
+    public ModelAndView home(Model model){
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("home");
 
-        return "home";
+        model.addAttribute("pedidos", repository.findAll());
+
+        return modelAndView;
+
+
     }
 
 }
